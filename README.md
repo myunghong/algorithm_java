@@ -73,7 +73,7 @@
 ```cpp
 ios::sync_with_stdio(false); // C stream(scanf/printf)과 C++ stream(cin/cout) 동기화 해제
 cin.tie(nullptr);            // 입력 전 출력 버퍼 비움(flush) 방지
-
+```
 
 ---
 
