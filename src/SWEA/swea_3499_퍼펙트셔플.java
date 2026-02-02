@@ -23,8 +23,7 @@ public class swea_3499_퍼펙트셔플 {
 					} else {
 						downQue.offer(st.nextToken());
 					}
-				}
-				else {
+				} else {
 					if (i <= cardNum / 2) {
 						upQue.offer(st.nextToken());
 					} else {
@@ -35,17 +34,12 @@ public class swea_3499_퍼펙트셔플 {
 
 			sb.append("#").append(tc).append(" ");
 			while (!upQue.isEmpty() || !downQue.isEmpty()) {
-				if (cardNum % 2 == 0) {
-					if (!upQue.isEmpty())
-						sb.append(upQue.poll()).append(' ');
-					if (!downQue.isEmpty())
-						sb.append(downQue.poll()).append(' ');
-				} else {
-					if (!upQue.isEmpty())
-						sb.append(upQue.poll()).append(' ');
-					if (!downQue.isEmpty())
-						sb.append(downQue.poll()).append(' ');
-				}
+
+				if (!upQue.isEmpty())
+					sb.append(upQue.poll()).append(' ');
+				if (!downQue.isEmpty())
+					sb.append(downQue.poll()).append(' ');
+
 			}
 			sb.append('\n');
 		}
