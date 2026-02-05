@@ -7,22 +7,28 @@ public class boj_1863_스카이라인쉬운거 {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
-		int[][] board = new int[n+1][2];
 		int ans = 0;
+		Deque<Integer>stk = new ArrayDeque<>();
 		for(int i = 0; i<n; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			board[i][0] = Integer.parseInt(st.nextToken());
-			board[i][1] = Integer.parseInt(st.nextToken());
+			int x = Integer.parseInt(st.nextToken());
+			int y = Integer.parseInt(st.nextToken());
+			while(!stk.isEmpty()  && y < stk.peek()) {
+				if(stk.poll() != 0) {
+					ans++;
+				}
+			}
+			
+			
+			
+			if(stk.isEmpty() || stk.peek() < y) {
+				stk.push(y);
+			}
+			
 		}
-		board[n][0] = 1000001;
-		Arrays.sort(board, (r1, r2) -> Integer.compare(r1[0], r2[0]));
-		for(int i = 0; i<=n; i++) {
-			System.out.println(board[i][0] + " " + board[i][1]);
+		while(!stk.isEmpty()) {
+			if(stk.poll() != 0) ans++;
 		}
-		for(int i = 1; i<=n; i++) {
-			if(board[i - 1][1] > board[i][1]) ans++;
-		}
-		
 		System.out.println(ans);
 		
 		

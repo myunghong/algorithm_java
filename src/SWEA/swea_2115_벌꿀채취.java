@@ -64,7 +64,12 @@ public class swea_2115_벌꿀채취 {
 		Arrays.sort(temp);
 		int st = 0, en = M-1;
 		while( st < en) {
-			
+			return 1;
 		}
+		return 1;
 	}
 }
+
+
+// dfs를 통해 부분집합 다 구해서 합을 넘지 않으면서 제곱이 가장 큰 부분집합을 찾고 그걸 배열에 저장하기
+// 어느 한 곳을 고르면 거기로부터 M만큼 길이는 vis처리하고 나머지에서 하나 더 골라서 가장 합이 커지는 값 찾기
