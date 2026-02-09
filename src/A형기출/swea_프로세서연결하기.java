@@ -6,7 +6,7 @@ import java.io.*;
 // 0은 빈칸, 1은 core, -1은 전선
 public class swea_프로세서연결하기 {
 	static int[][] board;
-	static int N, ans, corecnt;
+	static int N, ans, corecnt, maxcorenum, bestans;
 	static List<Integer>[] cores; // 각 코어별로 연결한 전선들의 좌표
 	static List<Integer> corecoord = new ArrayList<>(); // 프로세서의 좌표
 
@@ -16,8 +16,11 @@ public class swea_프로세서연결하기 {
 		StringBuilder sb = new StringBuilder();
 		int TC = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= TC; tc++) {
+			corecoord.clear();
 			ans = 0;
 			corecnt = 0;
+			maxcorenum = 0;
+			bestans = 200;
 			N = Integer.parseInt(br.readLine());
 			board = new int[N][N];
 
@@ -40,93 +43,86 @@ public class swea_프로세서연결하기 {
 			for (int i = 0; i < corecnt; i++) {
 				cores[i] = new ArrayList<>();
 			}
-			dfs(0, 0, 0);
-
+			dfs(0, 0);
+			sb.append("#").append(tc).append(" ").append(bestans).append("\n");
 		}
 
 		System.out.println(sb);
 
 	}
 
-//	static void getAns() {
-//		int temp = 0;
-//		for (int i = 0; i < N; i++) {
-//			for (int j = 0; j < N; j++) {
-//				if (board[i][j] == -1)
-//					temp++;
-//			}
-//		}
-//		ans = Math.min(ans, temp);
-//	}
-
-	static void dfs(int coreidx, int pipenum, int corenum) {
-		if(coreidx == )
-		int nrow = corecoord.get(coreidx) / N, ncol = corecoord.get(coreidx);
-
+	
+	
+	
+	static void dfs(int coreidx, int corenum) {
+		if (coreidx == corecoord.size()) {
+			if (corenum > maxcorenum || (corenum == maxcorenum && bestans > ans)) {
+				maxcorenum = corenum;
+				bestans = ans;
+			}
+			return;
+		}
+		if(corecnt - coreidx + corenum < maxcorenum) return;
 		for (int i = 0; i < 5; i++) {
-			if(setpipe(coreidx, i)) corenum++;
-			dfs(coreidx + 1, pipenum, corenum);
+			int a = setpipe(coreidx, i) ? 1 : 0;
+			dfs(coreidx + 1, corenum + a);
 			returnPipe(coreidx);
 		}
 
 	}
 
-	static boolean setpipe(int idx,int dir) {
-		int nrow = corecoord.get(idx) / N, ncol = corecoord.get(idx);
+	static boolean setpipe(int idx, int dir) {
+		int nrow = corecoord.get(idx) / N, ncol = corecoord.get(idx) % N;
 		switch (dir) {
 		case 0: // 위쪽으로 전선 연결
-			while(nrow > 0) {
+			while (nrow > 0) {
 				nrow--;
-				if(board[nrow][ncol] ==0) {
+				if (board[nrow][ncol] == 0) {
 					board[nrow][ncol] = -1;
 					cores[idx].add(nrow * N + ncol);
-				}
-				else {
+					ans++;
+				} else {
 					returnPipe(idx);
-					cores[idx].clear();
 					return false;
 				}
 			}
 			break;
-			
+
 		case 1: // 오른쪽으로 전선 연결
-			while(ncol < N) {
+			while (ncol < N - 1) {
 				ncol++;
-				if(board[nrow][ncol] ==0) {
+				if (board[nrow][ncol] == 0) {
 					board[nrow][ncol] = -1;
 					cores[idx].add(nrow * N + ncol);
-				}
-				else {
+					ans++;
+				} else {
 					returnPipe(idx);
-					cores[idx].clear();
 					return false;
 				}
 			}
 			break;
 		case 2: // 아래로 전선 연결
-			while(nrow < N) {
+			while (nrow < N - 1) {
 				nrow++;
-				if(board[nrow][ncol] ==0) {
+				if (board[nrow][ncol] == 0) {
 					board[nrow][ncol] = -1;
-					cores[idx].add(nrow*N + ncol);
-				}
-				else {
+					cores[idx].add(nrow * N + ncol);
+					ans++;
+				} else {
 					returnPipe(idx);
-					cores[idx].clear();
 					return false;
 				}
 			}
 			break;
 		case 3: // 왼쪽으로 전선 연결
-			while(ncol > 0) {
+			while (ncol > 0) {
 				ncol--;
-				if(board[nrow][ncol] ==0) {
+				if (board[nrow][ncol] == 0) {
 					board[nrow][ncol] = -1;
 					cores[idx].add(nrow * N + ncol);
-				}
-				else {
+					ans++;
+				} else {
 					returnPipe(idx);
-					cores[idx].clear();
 					return false;
 				}
 			}
@@ -134,14 +130,15 @@ public class swea_프로세서연결하기 {
 		case 4:
 			return false;
 		}
-		ans += cores[idx].size();
 		return true;
 	}
 
 	static void returnPipe(int idx) {
 		int sizes = cores[idx].size();
 		while (!cores[idx].isEmpty()) {
-			board[idx / N][idx % N] = 0;
+			int temp = cores[idx].size();
+			int index = cores[idx].remove(temp - 1);
+			board[index / N][index % N] = 0;
 		}
 		ans -= sizes;
 		return;
