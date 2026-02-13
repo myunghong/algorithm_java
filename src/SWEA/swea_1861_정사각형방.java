@@ -23,10 +23,11 @@ public class swea_1861_정사각형방 {
 					board[i][j] = Integer.parseInt(st.nextToken());
 				}
 			}
-			int ans = 0, maxvis = 0;
+			int ans = Integer.MAX_VALUE, maxvis = 0;
 			for(int i = 0; i<N; i++) {
 				for(int j = 0; j<N; j++) {
 					vis = new int[N][N];
+					Q.clear();
 					Q.offer(i * N + j);
 					vis[i][j] = 1;
 					while(!Q.isEmpty()) {
@@ -41,9 +42,16 @@ public class swea_1861_정사각형방 {
 							if(board[x][y] - board[nx][ny] != -1) continue;
 							vis[nx][ny] = vis[x][y] + 1;
 							Q.offer(nx * N + ny);
-							if(vis[nx][ny] > maxvis) {
+							if(vis[nx][ny] >= maxvis) {
+								if(vis[nx][ny] == maxvis) {
+
+									ans = Math.min(ans, board[i][j]);
+								}
+								else {
+									ans = board[i][j];
+								}
 								maxvis = vis[nx][ny];
-								ans = board[i][j];
+								
 							}
 						}
 						
@@ -59,3 +67,5 @@ public class swea_1861_정사각형방 {
 	}	
 
 }
+
+
