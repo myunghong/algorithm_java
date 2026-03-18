@@ -75,7 +75,13 @@ class Solution
 				int ans = Integer.parseInt(st.nextToken());
 				if (ret != ans)
 				{
-					System.out.println("ret:" + ret + " ans:" + ans);
+//					System.out.println("ret:" + ret + " ans:" + ans + " char: " + mChar);
+//					for(int i = 0; i<=usersolution.idx / usersolution.W; i++) {
+//						for(int j = 0; j<usersolution.W; j++) {
+//							System.out.print(usersolution.memo[i][j] + " ");
+//						}
+//						System.out.println();
+//					}
 					correct = false;
 				}
 			}
