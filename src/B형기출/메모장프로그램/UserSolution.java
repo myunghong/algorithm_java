@@ -1,4 +1,4 @@
-package 메모장프로그램;
+package B형기출.메모장프로그램;
 
 import java.util.*;
 

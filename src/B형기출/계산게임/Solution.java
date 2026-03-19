@@ -1,4 +1,4 @@
-package 계산게임;
+package B형기출.계산게임;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
