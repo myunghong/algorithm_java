@@ -3,14 +3,14 @@ package 메모장프로그램;
 import java.util.*;
 
 class UserSolution {
-	int H, W, idx, len;
+	int H, W, row, col, len;
 	int[][] count;
 	Deque<Character>[] memo;
 
 	void init(int H, int W, char mStr[]) {
 		this.H = H;
 		this.W = W;
-		int len = 0;
+		len = 0;
 		memo = new ArrayDeque[H];
 		count = new int[H][26];
 		for(int i = 0; i<H; i++) {
@@ -25,60 +25,88 @@ class UserSolution {
 				count[i][mStr[i * W + j] - 'a']++;
 			}
 		}
-		idx = 0; // 현재 커서의 위치
-		
+		row = 0; // 현재 커서의 위치
+		col = 0;
 	}
 
 	void insert(char mChar) {
 		Deque<Character> Q = new ArrayDeque<>();
-		if(len == idx) {
-			memo[idx / W].offer(mChar);
+		int target = row * W + col;
+		if(len == target) {
+			memo[row].offer(mChar);
+
+			count[row][mChar -'a']++;
 			len++;
-			idx++;
+			col++;
+			if(col == W) {
+				col = 0;
+				row++;
+			}
 			return;
 		}
-		int cnt = memo[idx / W].size() - idx % W;
+		int cnt = memo[row].size() - col;
 		for(int i = 0; i<cnt; i++) {
-			Q.offerFirst(memo[idx / W].pollLast());
+			Q.offerFirst(memo[row].pollLast());
 		}
-		memo[idx / W].offerLast(mChar);
+		memo[row].offerLast(mChar);
+		count[row][mChar -'a']++;
+		len++;
 
 		while(!Q.isEmpty()) {
-			memo[idx / W].offerLast(Q.pollFirst());
+			memo[row].offerLast(Q.pollFirst());
 		}
-		if(memo[idx / W].size() >= W) {
-			for(int i = (idx / W); i<((len-1) / W) - 1; i++) {
+		if(memo[row].size() > W) {
+			for(int i = row; i<((len-1) / W); i++) {
+				count[i+1][memo[i].peekLast() - 'a']++;
+				count[i][memo[i].peekLast() - 'a']--;
 				memo[i+1].offerFirst(memo[i].pollLast());
 			}
 		}
-
-		len++;
-		idx++;
+		col++;
+		if(col == W) {
+			col = 0;
+			row++;
+		}
 	}
 
 	char moveCursor(int mRow, int mCol) {
 		int target = (mRow - 1) * W + mCol - 1;
 		
 		if(target >= len) {
-			idx = len;
+			row = len / W;
+			col = len  % W;
 			return '$';
 		}
 		else {
-			idx = (mRow - 1) * W + mCol - 1;
+			row = mRow - 1;
+			col = mCol - 1;
 			Deque<Character> Q = new ArrayDeque<>();
-			for(int i = 0; i<mCol; i++) {
-				Q.offerLast(memo[idx / W].pollFirst());
+			for(int i = 0; i<col; i++) {
+				Q.offerLast(memo[row].pollFirst());
 			}
-			Character ans = Q.peekLast();
+			Character ans = memo[row].peekFirst();
 			while(!Q.isEmpty()) {
-				memo[idx / W].offerFirst(Q.pollLast());
+				memo[row].offerFirst(Q.pollLast());
 			}
+//			if(ans == null) System.out.println("col:" + col + " row:" + row + " memo:" + memo[row].size());
 			return ans;
 		}
 	}
 
 	int countCharacter(char mChar) {
-
-		return 0;
+		int cnt = 0;
+		for(int i = row; i<=(len-1) / W; i++) {
+				cnt += count[i][mChar-'a'];
+		}
+		Deque<Character> Q = new ArrayDeque<>();
+		for(int i = 0; i<col; i++) {
+			Q.offerLast(memo[row].pollFirst());
+		}
+		while(!Q.isEmpty()) {
+			Character temp = Q.pollLast();
+			if(temp == mChar) cnt--;
+			memo[row].offerFirst(temp);
+		}
+		return cnt;
 	}
 }

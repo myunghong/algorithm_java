@@ -75,13 +75,10 @@ class Solution
 				int ans = Integer.parseInt(st.nextToken());
 				if (ret != ans)
 				{
-//					System.out.println("ret:" + ret + " ans:" + ans + " char: " + mChar);
-//					for(int i = 0; i<=usersolution.idx / usersolution.W; i++) {
-//						for(int j = 0; j<usersolution.W; j++) {
-//							System.out.print(usersolution.memo[i][j] + " ");
-//						}
-//						System.out.println();
-//					}
+					System.out.println("ret:" + ret + " ans:" + ans + " char: " + mChar + " row:" + usersolution.row + " col:" + usersolution.col);
+					for(int i = 0; i<usersolution.H; i++) {
+						System.out.println(usersolution.memo[i]);
+					}
 					correct = false;
 				}
 			}
